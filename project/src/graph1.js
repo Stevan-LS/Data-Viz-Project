@@ -21,8 +21,15 @@ export function createGraph1(data, years) {
     };
 
     function update(year) {
+        // Clear previous content
+        svg.selectAll('*').remove();
+        
         const filteredData = data.filter(d => d.Year === year);
         
+        // Create base group
+        const g = svg.append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
         // Compute rankings for each metric
         const rankings = {};
         const orderedCountries = {};
@@ -38,10 +45,6 @@ export function createGraph1(data, years) {
             .domain(metrics)
             .range([0, innerWidth])
             .padding(0.2);
-
-        // Create group for visualization
-        const g = svg.append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
 
         // Add vertical lines for each metric
         g.selectAll('.metric-line')
