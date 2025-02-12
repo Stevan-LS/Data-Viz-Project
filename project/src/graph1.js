@@ -142,13 +142,13 @@ export function createGraph1(data, years) {
 
         // Add metric labels
         g.selectAll('.metric-label')
-            .data(metrics)
-            .join('text')
-            .attr('class', 'metric-label')
-            .attr('x', d => xScale(d) + xScale.bandwidth() / 2)
-            .attr('y', innerHeight + 30)
-            .attr('text-anchor', 'middle')
-            .text(d => d.toUpperCase());
+        .data(metrics)
+        .join('text')
+        .attr('class', 'metric-label')
+        .attr('x', d => xScale(d) + xScale.bandwidth() / 2)
+        .attr('y', innerHeight + 30)
+        .attr('text-anchor', 'middle')
+        .text(d => d.slice(8).toUpperCase());
     }
 
     return update;
