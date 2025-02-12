@@ -27,6 +27,14 @@ export function createGraph1(data, years) {
         svg.selectAll('*').remove();
         
         const filteredData = data.filter(d => d.Year === year);
+
+        // Add title
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', margin.top / 2)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '16px')
+            .text(`Rankings for ${countrySelector} in ${year}`);
         
         // Create base group
         const g = svg.append('g')
@@ -141,14 +149,6 @@ export function createGraph1(data, years) {
             .attr('y', innerHeight + 30)
             .attr('text-anchor', 'middle')
             .text(d => d.toUpperCase());
-
-        // Add title
-        svg.append('text')
-            .attr('x', width / 2)
-            .attr('y', margin.top / 2)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '16px')
-            .text(`Rankings for ${countrySelector} (${years})`);
     }
 
     return update;
