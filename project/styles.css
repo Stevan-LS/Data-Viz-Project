@@ -62,3 +62,14 @@
 .scrubber-output {
     margin-left: 0.4em;
 }
+
+#controls {
+    margin: 20px;
+    text-align: center;
+}
+
+#countrySelector {
+    padding: 5px;
+    font-size: 16px;
+    min-width: 200px;
+}

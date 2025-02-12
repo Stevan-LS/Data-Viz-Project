@@ -76,6 +76,26 @@ export function createGraph2(data, years) {
         .attr("class", "tooltip")
         .style("opacity", 0);
 
+      // Ajouter une fonction pour dessiner la trajectoire
+function drawTrajectory(country) {
+    // Filtrer les données pour le pays sélectionné
+    const countryData = data.filter(d => d.Country === country);
+
+    // Créer une ligne générée à partir des données du pays
+    const lineGenerator = d3.line()
+        .x(d => x(+d["Value - HDI"]))
+        .y(d => y(+d["Value - GDP per capita"]));
+
+    // Ajouter la ligne à l'élément SVG
+    svg.append("path")
+        .datum(countryData)
+        .attr("fill", "none")
+        .attr("stroke", "#a71dd1")
+        .attr("stroke-width", 2)
+        .attr("d", lineGenerator)
+        .attr("class", "trajectory");
+}
+
     function update(year) {
         const filteredData = data.filter(d => d.Year === year);
         
@@ -104,6 +124,8 @@ export function createGraph2(data, years) {
                     .attr("stroke", "#333")
                     .attr('stroke-width', 2);
 
+                drawTrajectory(d.Country);
+
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", 1);
@@ -121,6 +143,7 @@ export function createGraph2(data, years) {
                     .attr("r", d => size(d["Value - Water Use Efficiency"]))
                     .attr("fill", d => color(d.Continent))
                     .attr("stroke", null);
+                svg.selectAll(".trajectory").remove();
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);

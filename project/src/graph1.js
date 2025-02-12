@@ -2,7 +2,7 @@ import { computeRankings } from "./utils.js";
 import { config } from "./config.js";
 
 const { width, height, margin } = config;
-const countrySelector = config.defaultCountry;
+let countrySelector = config.defaultCountry;
 
 export function createGraph1(data, years) {
     const svg = d3.select('#graph1')
@@ -17,10 +17,12 @@ export function createGraph1(data, years) {
     // Define metrics and their sorting order
     const metricConfig = {
         'Value - GDP per capita': { ascending: false },
-        'Value - HDI': { ascending: false }
+        'Value - HDI': { ascending: false },
+        'Value - Water Use Efficiency': { ascending: true },
+        'Value - Water Stress': { ascending: false }
     };
 
-    function update(year) {
+    function update(year, countrySelector) {
         // Clear previous content
         svg.selectAll('*').remove();
         

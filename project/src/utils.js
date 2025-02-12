@@ -38,4 +38,8 @@ export function computeRankings(data, metric, ascending) {
     });
     
     return {rankings, orderedCountries};
-  }
+}
+
+export function getUniqueCountries(data) {
+    return [...new Set(data.map(d => d.Country))].sort();
+}
