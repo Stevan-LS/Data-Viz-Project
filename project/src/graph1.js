@@ -18,8 +18,8 @@ export function createGraph1(data, years) {
     const metricConfig = {
         'Value - GDP per capita': { ascending: false },
         'Value - HDI': { ascending: false },
-        'Value - Water Use Efficiency': { ascending: true },
-        'Value - Water Stress': { ascending: false }
+        'Value - Water Use Efficiency': { ascending: false },
+        'Value - Water Stress': { ascending: true }
     };
 
     function update(year, countrySelector) {

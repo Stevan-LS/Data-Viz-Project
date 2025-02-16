@@ -3,17 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3.js Visualizations</title>
+    <title>Water Resources Analysis</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header class="main-header">
+        <h1>Global Water Resources Dashboard</h1>
+        <p class="subtitle">Analysis of water resources, GDP, and human development across countries</p>
+    </header>
+    
     <div class="container">
         <div id="controls"></div>
         <div class="graph-container">
             <div id="scrubber"></div>
-            <div class="graph" id="graph1"></div>
-            <div class="graph" id="graph2"></div>
+            <div class="graph-wrapper">
+                <button class="zoom-button" data-graph="graph1">
+                    <span class="zoom-icon">🔍</span>
+                </button>
+                <div class="graph" id="graph1"></div>
+            </div>
+            <div class="graph-wrapper">
+                <button class="zoom-button" data-graph="graph2">
+                    <span class="zoom-icon">🔍</span>
+                </button>
+                <div class="graph" id="graph2"></div>
+            </div>
         </div>
     </div>
 

@@ -3,6 +3,28 @@ import { processData, getYears, getUniqueCountries } from './src/utils.js';
 import { createGraph1 } from './src/graph1.js';
 import { createGraph2 } from './src/graph2.js';
 
+function initZoomButtons() {
+    const zoomButtons = document.querySelectorAll('.zoom-button');
+    
+    zoomButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const graphId = button.dataset.graph;
+            const wrapper = button.parentElement;
+            
+            if (wrapper.classList.contains('fullscreen')) {
+                wrapper.classList.remove('fullscreen');
+                button.innerHTML = '<span class="zoom-icon">🔍</span>';
+            } else {
+                wrapper.classList.add('fullscreen');
+                button.innerHTML = '<span class="zoom-icon">✖</span>';
+            }
+            
+            // Trigger resize event to update graph
+            window.dispatchEvent(new Event('resize'));
+        });
+    });
+}
+
 let currentCountry = null;
 let currentYear = null;
 
@@ -54,6 +76,8 @@ async function init() {
         update1(currentYear, currentCountry);
         update2(currentYear, currentCountry);
     });
+    
+    initZoomButtons();
 }
 
 init();
