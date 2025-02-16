@@ -1,7 +1,8 @@
 import { config } from "./config.js";
 const { width, height, margin } = config;
 
-export function createGraph2(data, years) {
+// Modify the function signature to accept the callback
+export function createGraph2(data, years, onCountrySelect) {
   let selectedCountry = null;
 
   const svg = d3.select('#graph2')
@@ -145,6 +146,7 @@ export function createGraph2(data, years) {
       .attr("class", isSelected ? "trajectory-selected" : "trajectory-hover");
   }
 
+  // Modify clearSelection function
   function clearSelection() {
     if (selectedCountry) {
       svg.selectAll("circle.country")
@@ -156,6 +158,7 @@ export function createGraph2(data, years) {
       svg.selectAll(".trajectory-selected").remove();
       selectedCountry = null;
       selectedTooltip.style("opacity", 0);
+      onCountrySelect(null); // Clear selection in both graphs
     }
   }
 
@@ -182,15 +185,18 @@ export function createGraph2(data, years) {
               size(d["Value - Water Use Efficiency"]))),
         exit => exit.remove()
       )
+      // Modify the click handler in the update function
       .on("click", (event, d) => {
         event.stopPropagation();
         if (selectedCountry === d.Country) {
           clearSelection();
+          onCountrySelect(null); // Clear selection in both graphs
         } else {
           if (selectedCountry) {
             clearSelection();
           }
           selectedCountry = d.Country;
+          onCountrySelect(d.Country); // Update selection in both graphs
           
           d3.select(event.target)
             .attr("r", d => size(d["Value - Water Use Efficiency"]) + 10)
@@ -240,6 +246,16 @@ export function createGraph2(data, years) {
           hoverTooltip.style("opacity", 0);
         }
       });
+
+    // Update selected country tooltip if exists
+    if (selectedCountry) {
+        const selectedData = filteredData.find(d => d.Country === selectedCountry);
+        if (selectedData) {
+            selectedTooltip
+                .style("opacity", 1)
+                .html(createTooltipContent(selectedData));
+        }
+    }
 
     // Update year displays
     yearLabel.text(year);
