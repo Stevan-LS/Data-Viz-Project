@@ -25,16 +25,6 @@ function initZoomButtons() {
     });
 }
 
-let currentCountry = null;
-let currentYear = null;
-
-function updateCountrySelection(country) {
-    currentCountry = country;
-    const select = d3.select('#countrySelector');
-    select.property('value', country);
-    update1(currentYear, country);
-    update2(currentYear, country);
-}
 
 // Constants and configurations
 const width = 960;
@@ -50,14 +40,15 @@ async function init() {
     const years = getYears(processedData);
     const countries = getUniqueCountries(processedData);
     
-    currentYear = years[0];
     
     // Create country selector
     const select = d3.select('#controls')
         .append('select')
         .attr('id', 'countrySelector')
         .on('change', function() {
-            updateCountrySelection(this.value);
+            const selectedCountry = this.value;
+            update1(currentYear, selectedCountry);
+            update2(currentYear, selectedCountry);
         });
 
     select.selectAll('option')
@@ -65,7 +56,8 @@ async function init() {
         .join('option')
         .attr('value', d => d)
         .text(d => d);
-        
+    
+    let currentYear = years[0];
     const update1 = createGraph1(processedData, years);
     const update2 = createGraph2(processedData, years);
     const scrubber = initScrubber(processedData);
@@ -73,8 +65,8 @@ async function init() {
     // Link scrubber to graph update
     scrubber.addEventListener('input', event => {
         currentYear = event.detail;
-        update1(currentYear, currentCountry);
-        update2(currentYear, currentCountry);
+        update1(currentYear, select.node().value);
+        update2(currentYear, select.node().value);
     });
     
     initZoomButtons();
