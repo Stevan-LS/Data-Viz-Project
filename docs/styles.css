@@ -76,6 +76,9 @@ body {
     display: flex;
     height: 33px;
     align-items: center;
+    justify-content: center;
+    margin: 0.4em auto;
+    max-width: 400px;
 }
 
 .scrubber-button {
