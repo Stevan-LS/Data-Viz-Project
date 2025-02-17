@@ -106,20 +106,21 @@ export function createGraph2(data, years) {
     const tooltipWidth = tooltipNode.offsetWidth;
     const tooltipHeight = tooltipNode.offsetHeight;
     
-    let left = event.pageX + 10;
-    let top = event.pageY - tooltipHeight - 10;
+    let left = event.pageX - (tooltipWidth / 2); // Center horizontally
+    let top = event.pageY - tooltipHeight - 5; // Position just above point
 
+    // Prevent tooltip from going off screen
+    if (left < 10) left = 10;
     if (left + tooltipWidth > window.innerWidth) {
-      left = window.innerWidth - tooltipWidth - 10;
+        left = window.innerWidth - tooltipWidth - 10;
     }
-
-    if (top < 0) {
-      top = event.pageY + 10;
+    if (top < 10) {
+        top = event.pageY + 15; // Position below point if too high
     }
 
     tooltip
-      .style("left", `${left}px`)
-      .style("top", `${top}px`);
+        .style("left", `${left}px`)
+        .style("top", `${top}px`);
   }
 
   function createTooltipContent(d) {
@@ -160,12 +161,29 @@ export function createGraph2(data, years) {
     }
   }
 
-  function update(year) {
+  function update(year, newSelectedCountry) {
     const filteredData = data.filter(d => d.Year === year);
 
+    // Clear previous selection if country changes
+    if (selectedCountry !== newSelectedCountry) {
+        // Reset previous selected country
+        svg.selectAll("circle.country")
+            .filter(d => d.Country === selectedCountry)
+            .attr("r", d => size(d["Value - Water Use Efficiency"]))
+            .attr("fill", d => color(d.Continent))
+            .attr("stroke", null);
+
+        // Remove previous trajectory
+        svg.selectAll(".trajectory-selected").remove();
+        
+        // Update selected country
+        selectedCountry = newSelectedCountry;
+    }
+
+    // Rest of the update function...
     const countries = svg.selectAll("circle.country")
-      .data(filteredData, d => d.Country)
-      .join(
+        .data(filteredData, d => d.Country)
+        .join(
         enter => enter.append("circle")
           .attr("class", "country")
           .attr("cx", d => x(d["Value - HDI"]))
@@ -182,66 +200,62 @@ export function createGraph2(data, years) {
               size(d["Value - Water Use Efficiency"]) + 10 : 
               size(d["Value - Water Use Efficiency"]))),
         exit => exit.remove()
-      )
-      .on("click", (event, d) => {
-        event.stopPropagation();
-        if (selectedCountry === d.Country) {
-          clearSelection();
-        } else {
-          if (selectedCountry) {
-            clearSelection();
-          }
-          selectedCountry = d.Country;
-          
-          d3.select(event.target)
-            .attr("r", d => size(d["Value - Water Use Efficiency"]) + 10)
-            .attr("fill", "#a71dd1")
-            .attr("stroke", "#333")
-            .attr('stroke-width', 2);
+      );
 
-          drawTrajectory(d.Country, true);
-          
-          selectedTooltip
-            .style("opacity", 1)
-            .html(createTooltipContent(d));
-          
-          updateTooltipPosition(selectedTooltip, event);
+    // Handle selection from dropdown
+    if (selectedCountry) {
+        const selectedData = filteredData.find(d => d.Country === selectedCountry);
+        if (selectedData) {
+            // Update circle appearance
+            const selectedCircle = svg.selectAll("circle.country")
+                .filter(d => d.Country === selectedCountry);
+                
+            selectedCircle
+                .attr("r", d => size(d["Value - Water Use Efficiency"]) + 10)
+                .attr("fill", "#a71dd1")
+                .attr("stroke", "#333")
+                .attr("stroke-width", 2);
+
+            // Update tooltip content and position
+            selectedTooltip
+                .style("opacity", 1)
+                .html(createTooltipContent(selectedData));
+
+            // Get proper coordinates for tooltip
+            const circleX = x(selectedData["Value - HDI"]);
+            const circleY = y(selectedData["Value - GDP per capita"]);
+            const svgRect = svg.node().getBoundingClientRect();
+            
+            updateTooltipPosition(selectedTooltip, {
+                pageX: circleX + svgRect.left + margin.left, // Add margin offset
+                pageY: circleY + svgRect.top + margin.top    // Add margin offset
+            });
+
+            // Draw trajectory after transition
+            setTimeout(() => {
+                svg.selectAll(".trajectory-selected").remove();
+                drawTrajectory(selectedCountry, true);
+            }, 1000); // Match transition duration
         }
-      })
-      .on("mouseover", (event, d) => {
-        if (selectedCountry !== d.Country) {
-          d3.select(event.target)
-            .attr("r", d => size(d["Value - Water Use Efficiency"]) + 10)
-            .attr("fill", "#666")
-            .attr("stroke", "#333")
-            .attr('stroke-width', 2);
+    }
 
-          drawTrajectory(d.Country, false);
+    // Handle hover
+    countries
+        .on("mouseover", (event, d) => {
+            hoverTooltip
+                .style("opacity", 1)
+                .html(createTooltipContent(d));
 
-          hoverTooltip
-            .style("opacity", 1)
-            .html(createTooltipContent(d));
-          
-          updateTooltipPosition(hoverTooltip, event);
-        }
-      })
-      .on("mousemove", (event, d) => {
-        if (selectedCountry !== d.Country) {
-          updateTooltipPosition(hoverTooltip, event);
-        }
-      })
-      .on("mouseout", (event, d) => {
-        if (selectedCountry !== d.Country) {
-          d3.select(event.target)
-            .attr("r", d => size(d["Value - Water Use Efficiency"]))
-            .attr("fill", d => color(d.Continent))
-            .attr("stroke", null);
+            updateTooltipPosition(hoverTooltip, event);
 
-          svg.selectAll(".trajectory-hover").remove();
-          hoverTooltip.style("opacity", 0);
-        }
-      });
-
+            // Draw trajectory
+            drawTrajectory(d.Country);
+        })
+        .on("mousemove", event => updateTooltipPosition(hoverTooltip, event))
+        .on("mouseout", () => {
+            hoverTooltip.style("opacity", 0);
+            svg.selectAll(".trajectory-hover").remove();
+        });
     // Update year displays
     yearLabel.text(year);
     titre.text(`GDP & HDI per Country in ${year}`);
@@ -251,6 +265,9 @@ export function createGraph2(data, years) {
       svg.selectAll(".trajectory-selected").remove();
       drawTrajectory(selectedCountry, true);
     }
+
+    // Update size legend
+    updateSizeLegend(filteredData);
   }
 
   // Add legend
@@ -273,6 +290,63 @@ export function createGraph2(data, years) {
       .attr("font-size", 12)
       .text(continent);
   });
+
+  function updateSizeLegend(filteredData) {
+    // Remove previous size legend
+    svg.selectAll(".size-legend").remove();
+
+    // Use fixed radius values
+    const radiusValues = [30, 21, 12, 4];  // From largest to smallest
+
+    // Get current year's efficiency range
+    const currentEfficiencyExtent = d3.extent(filteredData, d => d["Value - Water Use Efficiency"]);
+    
+    // Calculate values for current year that correspond to the fixed radii
+    const sizeValues = radiusValues.map(r => {
+        const normalizedRadius = (r - 4) / (30 - 4); // Convert radius to 0-1 range
+        return currentEfficiencyExtent[0] + 
+               normalizedRadius * (currentEfficiencyExtent[1] - currentEfficiencyExtent[0]);
+    });
+
+    const sizeLegend = svg.append("g")
+        .attr("class", "size-legend")
+        .attr("transform", `translate(${margin.left + 75}, ${margin.top + 180})`);
+
+    sizeLegend.append("text")
+        .attr("y", -40)
+        .attr("fill", "currentColor")
+        .attr("font-size", 12)
+        .attr("font-weight", "bold")
+        .text("Water Use Efficiency (US$/m³)");
+
+    let currentX = 0;
+
+    radiusValues.forEach((radius, i) => {
+        const legendItem = sizeLegend.append("g")
+            .attr("transform", `translate(${currentX}, 0)`);
+        
+        legendItem.append("circle")
+            .attr("r", radius)
+            .attr("fill", "none")
+            .attr("stroke", "currentColor")
+            .attr("stroke-width", 1)
+            .attr("opacity", 0.7);
+
+        legendItem.append("text")
+            .attr("y", radius + 15)
+            .attr("x", 0)
+            .attr("text-anchor", "middle")
+            .attr("fill", "currentColor")
+            .attr("font-size", 10)
+            .text(d3.format(",.0f")(sizeValues[i]));
+
+        currentX += Math.max(radius * 2.5, 40);
+    });
+  }
+
+  // Remove click handler from background
+  svg.select("rect")
+    .on("click", null);
 
   return update;
 }
