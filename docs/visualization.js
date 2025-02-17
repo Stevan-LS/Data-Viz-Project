@@ -40,6 +40,9 @@ async function init() {
     const years = getYears(processedData);
     const countries = getUniqueCountries(processedData);
     
+    let currentYear = years[0];  // Move this declaration before select creation
+    const update1 = createGraph1(processedData, years);
+    const update2 = createGraph2(processedData, years);
     
     // Create country selector
     const select = d3.select('#controls')
@@ -47,6 +50,7 @@ async function init() {
         .attr('id', 'countrySelector')
         .on('change', function() {
             const selectedCountry = this.value;
+            // Immediately update both graphs when country changes
             update1(currentYear, selectedCountry);
             update2(currentYear, selectedCountry);
         });
@@ -55,11 +59,9 @@ async function init() {
         .data(countries)
         .join('option')
         .attr('value', d => d)
-        .text(d => d);
+        .text(d => d)
+        .property('selected', d => d === 'France');
     
-    let currentYear = years[0];
-    const update1 = createGraph1(processedData, years);
-    const update2 = createGraph2(processedData, years);
     const scrubber = initScrubber(processedData);
     
     // Link scrubber to graph update
@@ -68,8 +70,12 @@ async function init() {
         update1(currentYear, select.node().value);
         update2(currentYear, select.node().value);
     });
-    
+
     initZoomButtons();
+
+    // Initial render with default values
+    update1(currentYear, select.node().value);
+    update2(currentYear, select.node().value);
 }
 
 init();
