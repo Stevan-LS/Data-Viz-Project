@@ -150,7 +150,7 @@ export function initScrubber(data) {
         format: year => `Year: ${year}`
     });
     
-    document.getElementById('scrubber').appendChild(scrubber.element);
+    document.getElementById('controls').appendChild(scrubber.element);
     
     return scrubber;
 }

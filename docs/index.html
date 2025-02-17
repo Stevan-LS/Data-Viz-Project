@@ -6,17 +6,17 @@
     <title>Water Resources Analysis</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <header class="main-header">
         <h1>Global Water Resources Dashboard</h1>
         <p class="subtitle">Analysis of water resources, GDP, and human development across countries</p>
     </header>
-    
-    <div class="container">
+
         <div id="controls"></div>
         <div class="graph-container">
-            <div id="scrubber"></div>
             <div class="graph-wrapper">
                 <button class="zoom-button" data-graph="graph1">
                     <span class="zoom-icon">🔍</span>
@@ -31,6 +31,42 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="metrics-panel">
+            <h2>Metrics Explanation</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>GDP per capita</h3>
+                    <p>Gross Domestic Product per person in current US dollars. Indicates economic output and standard of living.</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Human Development Index (HDI)</h3>
+                    <p>Composite measure of health, education, and income dimensions. Ranges from 0 to 1, with 1 being the highest human development.</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Water Use Efficiency</h3>
+                    <p>Value added per unit of water used (US$/m³). Higher values indicate more efficient water use in economic activities.</p>
+                    <div class="formula-container">
+                        <div class="formula">
+                            $$
+                            \text{Water Use Efficiency} = \frac{\text{Gross Value Added (US\$)}}{\text{Volume of Water Used ($m^3$)}}
+                            $$
+                        </div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <h3>Water Stress</h3>
+                    <p>Freshwater withdrawal as a proportion of available freshwater resources (%). Higher percentages indicate higher water stress.</p>
+                    <div class="formula-container">
+                        <div class="formula">
+                            $$
+                            \text{Water Stress} = \frac{\text{Total Freshwater Withdrawal}}{\text{Total Renewable Water Resources}} \times 100
+                            $$
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <script type="module" src="visualization.js"></script>
 </body>

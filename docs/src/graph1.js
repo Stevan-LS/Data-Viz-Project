@@ -31,7 +31,7 @@ export function createGraph1(data, years) {
         // Add title
         svg.append('text')
             .attr('x', width / 2)
-            .attr('y', margin.top / 2)
+            .attr('y', margin.top / 10)
             .attr('text-anchor', 'middle')
             .style('font-size', '16px')
             .text(`Rankings for ${countrySelector} in ${year}`);
@@ -112,16 +112,34 @@ export function createGraph1(data, years) {
                         .attr('font-size', d.Country === countrySelector ? '12px' : '10px');
                 });
 
+            const colorScale = d3.scaleSequential()
+                .domain([1, filteredData.length])
+                .interpolator(t => d3.interpolate("#0d47a1", "#90caf9")(t));
+
             // Add larger rectangle for selected country
             const selectedCountryData = filteredData.find(d => d.Country === countrySelector);
             if (selectedCountryData) {
+                const rankingPosition = rankings[metric][countrySelector];
+
+                // Add ranking number at the top of the metric line
+                metricGroup.append('text')
+                    .attr('class', 'ranking-label')
+                    .attr('x', xScale.bandwidth() / 2)
+                    .attr('y', -10)  // Position above the metric line
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#2196F3')
+                    .attr('font-weight', 'bold')
+                    .attr('font-size', '14px')
+                    .text(`#${rankingPosition}`);
+
                 metricGroup.append('rect')
                     .attr('class', 'selected-rect')
                     .attr('x', 0)
                     .attr('y', yScale(countrySelector) - 10)
                     .attr('width', xScale.bandwidth())
                     .attr('height', 20)
-                    .attr('fill', '#2196F3');
+                    .attr('fill', colorScale(rankingPosition))  // Use color based on ranking
+                    .attr('opacity', 0.9);
 
                 // Add value label for selected country
                 metricGroup.append('text')
