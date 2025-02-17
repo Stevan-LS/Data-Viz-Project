@@ -156,3 +156,66 @@ body {
 .zoom-icon {
     font-size: 1.2rem;
 }
+
+.metrics-panel {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.metrics-panel h2 {
+    color: #1e88e5;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.metric-card {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #1e88e5;
+    min-height: 220px;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-card h3 {
+    color: #0d47a1;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.metric-card p {
+    margin: 0;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.formula-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: auto; 
+    -webkit-overflow-scrolling: touch; 
+}
+
+.formula {
+    padding: 1rem;
+    background: #f1f8fe;
+    border-radius: 4px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
