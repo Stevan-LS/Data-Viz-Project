@@ -41,9 +41,9 @@ export function createGraph2(data, years) {
   const selectedTooltip = svg.append("foreignObject")
     .attr("class", "selected-tooltip")
     .attr("width", 200)
-    .attr("height", 100)
+    .attr("height", 122)
     .attr("x", margin.left + width - 300)  // Initial x position
-    .attr("y", margin.top + height - 300)   // Initial y position
+    .attr("y", margin.top + height - 305)   // Changed from -300 to -350 to move it up
     .append("xhtml:div")
     .style("background", "rgba(167, 29, 209, 0.1)")
     .style("border", "2px solid #a71dd1")
@@ -88,7 +88,7 @@ export function createGraph2(data, years) {
       .attr("y", margin.top)
       .attr("fill", "currentColor")
       .attr("text-anchor", "start")
-      .text("GDP"));
+      .text("GDP (US$/inhab)"));
 
   svg.append("g").call(xAxis);
   svg.append("g").call(yAxis);
@@ -130,7 +130,7 @@ export function createGraph2(data, years) {
     return `
       <strong>Country:</strong> ${d.Country}<br>
       <strong>HDI:</strong> ${d["Value - HDI"]}<br>
-      <strong>GDP per capita:</strong> ${d["Value - GDP per capita"]}<br>
+      <strong>GDP per capita (US$/inhab):</strong> ${d["Value - GDP per capita"]}<br>
     `;
   }
 
