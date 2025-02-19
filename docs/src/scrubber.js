@@ -146,7 +146,7 @@ class Scrubber extends EventTarget {
 export function initScrubber(data) {
     const years = [...new Set(data.map(d => d.Year))];
     const scrubber = new Scrubber(years, {
-        delay: 1000, // Increased from 250 to 1000ms
+        delay: 1500,
         format: year => `Year: ${year}`
     });
     
