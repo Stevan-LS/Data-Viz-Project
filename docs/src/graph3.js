@@ -154,7 +154,7 @@ export function createGraph3(data, years) {
             .attr("cx", d => x(d.TSNE_1))
             .attr("cy", d => y(d.TSNE_2))
             .attr("r", d => d.Country === selectedCountry ? 
-              CIRCLE_RADIUS + 4 : // Slightly larger for selected country
+              CIRCLE_RADIUS * 5 : // Slightly larger for selected country
               CIRCLE_RADIUS)),
         exit => exit.remove()
       );
@@ -166,7 +166,7 @@ export function createGraph3(data, years) {
           .filter(d => d.Country === selectedCountry);
             
         selectedCircle
-          .attr("r", CIRCLE_RADIUS + 4)  // Slightly larger for selected country
+          .attr("r", CIRCLE_RADIUS * 5)  // Slightly larger for selected country
           .attr("fill", "#a71dd1")
           .attr("stroke", "#333")
           .attr("stroke-width", 2);
