@@ -28,12 +28,7 @@ export function createGraph3(data, years) {
   // Remove the size scale (or set a fixed size)
   const CIRCLE_RADIUS = 6; // Fixed radius for all circles
 
-  // Background for click handling
-  svg.append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("fill", "transparent")
-    .on("click", clearSelection);
+
 
   // Create tooltips
   const selectedTooltip = svg.append("foreignObject")
@@ -114,8 +109,6 @@ export function createGraph3(data, years) {
   function createTooltipContent(d) {
     return `
       <strong>Country:</strong> ${d.Country}<br>
-      <strong>t-SNE 1:</strong> ${d.TSNE_1.toFixed(3)}<br>
-      <strong>t-SNE 2:</strong> ${d.TSNE_2.toFixed(3)}<br>
     `;
   }
 
