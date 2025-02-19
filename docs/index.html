@@ -26,6 +26,12 @@
                 <div class="graph" id="graph2"></div>
             </div>
             <div class="graph-wrapper">
+                <button class="zoom-button" data-graph="graph3">
+                    <span class="zoom-icon">🔍</span>
+                </button>
+                <div id="graph3"></div>
+            </div>
+            <div class="graph-wrapper">
                 <button class="zoom-button" data-graph="graph1">
                     <span class="zoom-icon">🔍</span>
                 </button>
@@ -66,6 +72,19 @@
                             $$
                         </div>
                     </div>
+                </div>
+                <div class="metric-card">
+                    <h3>2D t-SNE Visualization</h3>
+                    <p>This visualization uses t-SNE (t-Distributed Stochastic Neighbor Embedding) to reduce 4 water-related metrics into 2 dimensions:</p>
+                    <ul style="list-style-type: disc; margin-left: 20px;">
+                        <li>Water Use Efficiency</li>
+                        <li>Water Stress</li>
+                        <li>Total population with access to safe drinking-water</li>
+                        <li>Total renewable water resources per capita</li>
+                    </ul>
+                    <p style="font-size: 0.9em; margin-top: 10px;">
+                        t-SNE helps visualize high-dimensional data by giving each country a position in 2D space while preserving the relationships between countries based on these four metrics.
+                    </p>
                 </div>
             </div>
         </div>
