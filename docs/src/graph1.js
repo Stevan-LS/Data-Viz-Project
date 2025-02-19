@@ -31,8 +31,9 @@ export function createGraph1(data, years) {
         // Add title
         svg.append('text')
             .attr('x', width / 2)
-            .attr('y', margin.top / 10)
+            .attr('y', margin.top / 5)
             .attr('text-anchor', 'middle')
+            .attr("dominant-baseline", "middle")
             .style('font-size', '16px')
             .text(`Rankings for ${countrySelector} in ${year}`);
         

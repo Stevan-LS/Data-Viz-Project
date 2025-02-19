@@ -66,7 +66,7 @@ export function createGraph2(data, years) {
     .attr("x", width / 2)
     .attr("y", margin.top)
     .attr("text-anchor", "middle")
-    .style("font-size", "12px")
+    .style("font-size", "16px")
     .text(`GDP & HDI per Country`);
 
   // Add axes
