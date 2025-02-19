@@ -57,7 +57,7 @@ const margin = { top: 40, right: 40, bottom: 60, left: 60 };
 
 // Initialize visualizations
 async function init() {
-    const data = await d3.csv("aquastat_tsne_data.csv");  // Changed to new data file
+    const data = await d3.csv("aquastat_TSNE_data.csv");  // Changed to new data file
     const processedData = processData(data);
     const years = getYears(processedData);
     const countries = getUniqueCountries(processedData);
