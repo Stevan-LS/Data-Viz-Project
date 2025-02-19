@@ -38,14 +38,17 @@ export function createGraph2(data, years) {
     .on("click", clearSelection);
 
   // Create two tooltips
-  const selectedTooltip = d3.select("body").append("div")
+  const selectedTooltip = svg.append("foreignObject")
     .attr("class", "selected-tooltip")
-    .style("position", "absolute")
+    .attr("width", 200)
+    .attr("height", 100)
+    .attr("x", margin.left + width - 300)  // Initial x position
+    .attr("y", margin.top + height - 300)   // Initial y position
+    .append("xhtml:div")
     .style("background", "rgba(167, 29, 209, 0.1)")
     .style("border", "2px solid #a71dd1")
     .style("padding", "5px")
     .style("border-radius", "5px")
-    .style("pointer-events", "none")
     .style("opacity", 0);
 
   const hoverTooltip = d3.select("body").append("div")
@@ -64,7 +67,7 @@ export function createGraph2(data, years) {
     .attr("y", margin.top)
     .attr("text-anchor", "middle")
     .style("font-size", "12px")
-    .text(`GDP & HDI per Country in ${years[0]}`);
+    .text(`GDP & HDI per Country`);
 
   // Add axes
   const xAxis = g => g
@@ -128,7 +131,6 @@ export function createGraph2(data, years) {
       <strong>Country:</strong> ${d.Country}<br>
       <strong>HDI:</strong> ${d["Value - HDI"]}<br>
       <strong>GDP per capita:</strong> ${d["Value - GDP per capita"]}<br>
-      <strong>Continent:</strong> ${d.Continent}
     `;
   }
 
@@ -216,20 +218,10 @@ export function createGraph2(data, years) {
                 .attr("stroke", "#333")
                 .attr("stroke-width", 2);
 
-            // Update tooltip content and position
+            // Update tooltip content and opacity
             selectedTooltip
                 .style("opacity", 1)
                 .html(createTooltipContent(selectedData));
-
-            // Get proper coordinates for tooltip
-            const circleX = x(selectedData["Value - HDI"]);
-            const circleY = y(selectedData["Value - GDP per capita"]);
-            const svgRect = svg.node().getBoundingClientRect();
-            
-            updateTooltipPosition(selectedTooltip, {
-                pageX: circleX + svgRect.left + margin.left, // Add margin offset
-                pageY: circleY + svgRect.top + margin.top    // Add margin offset
-            });
 
             // Draw trajectory after transition
             setTimeout(() => {
@@ -258,7 +250,6 @@ export function createGraph2(data, years) {
         });
     // Update year displays
     yearLabel.text(year);
-    titre.text(`GDP & HDI per Country in ${year}`);
 
     // Update selected country trajectory if exists
     if (selectedCountry) {
