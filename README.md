@@ -4,7 +4,7 @@ A dynamic data visualization project focused on exploring and analyzing global w
 
 ## Project Overview
 
-This project provides an interactive platform to explore water resource data through multiple coordinated visualizations:
+This project provides an interactive platform to explore water resource data through multiple coordinated visualizations. Understanding water resource data is crucial for sustainable development and policy-making. Our dashboard offers unique insights by combining multiple visualizations and interactive controls.
 
 - **Multiple Interactive Graphs**: Three interconnected visualizations (graph1, graph2, graph3) that provide different perspectives on the data
 - **Dynamic Controls**: Interactive elements allowing users to filter and manipulate the displayed data
@@ -43,6 +43,12 @@ This project provides an interactive platform to explore water resource data thr
 2. Open `docs/index.html` in a modern web browser
 3. Interact with the visualizations to explore global water resource data
 
+## Usage Instructions
+
+- **Interactive Controls**: Use the provided controls to filter data and adjust parameters.
+- **Coordinated Views**: Changes in one graph will update related visualizations.
+- **Zoom Functionality**: Click and drag to zoom into specific areas of the graphs.
+
 ## Data Source
 
 This project uses AQUASTAT data, which provides comprehensive water-related statistics at the country level.
@@ -51,7 +57,3 @@ This project uses AQUASTAT data, which provides comprehensive water-related stat
 
 - Axel Labrousse
 - Stevan Le Stanc
-
-## License
-
-This project is available for academic and personal use.
